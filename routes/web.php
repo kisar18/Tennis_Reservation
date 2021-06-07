@@ -1,6 +1,9 @@
 <?php
 
+use App\Http\Controllers\ReservationController;
+use App\Models\Reservation;
 use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\Storage;
 
 /*
 |--------------------------------------------------------------------------
@@ -13,6 +16,8 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
+Route::resource('reservations', ReservationController::class);
+
+Route::get('/', function() {
+    return view('reservations.welcome');
 });

@@ -1,0 +1,11 @@
+html, body {
+    height: 100%;
+}
+
+body {
+    background: rgb(108, 117, 125);
+    background: linear-gradient(0deg, rgba(108, 117, 125, 1) 0%, rgba(52, 58, 64, 1) 80%);
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+}
