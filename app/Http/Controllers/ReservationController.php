@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Reservation;
 use App\Http\Requests\StoreReservationRequest;
+use App\Http\Requests\UpdateReservationRequest;
 
 class ReservationController extends Controller
 {
@@ -75,7 +76,8 @@ class ReservationController extends Controller
      */
     public function edit($id)
     {
-        //
+        $reservation = Reservation::find($id);
+        return view('reservations.edit', ['reservation' => $reservation]);
     }
 
     /**
@@ -85,9 +87,19 @@ class ReservationController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(UpdateReservationRequest $request)
     {
-        //
+        $reservation = Reservation::find($request->id);
+        $reservation->player_name = $request->player_name;
+        $reservation->player_surname = $request->player_surname;
+        $reservation->email = $request->email;
+        $reservation->court = $request->court;
+        $reservation->date = $request->date;
+        $reservation->start_time = $request->start_time;
+        $reservation->end_time = $request->end_time;
+        $reservation->save();
+
+        return redirect()->route('reservations.index');
     }
 
     /**
@@ -98,6 +110,9 @@ class ReservationController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $reservation = Reservation::find($id);
+        $reservation->delete();
+
+        return redirect()->route('reservations.index');
     }
 }
