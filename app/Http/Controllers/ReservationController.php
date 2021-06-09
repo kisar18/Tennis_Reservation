@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Models\Reservation;
 use App\Http\Requests\StoreReservationRequest;
 use App\Http\Requests\UpdateReservationRequest;
+use Illuminate\Support\Facades\DB;
 
 class ReservationController extends Controller
 {
@@ -38,17 +39,36 @@ class ReservationController extends Controller
      */
     public function store(StoreReservationRequest $request)
     {
-        $newReservation = new Reservation();
-        $newReservation->player_name = $request->player_name;
-        $newReservation->player_surname = $request->player_surname;
-        $newReservation->email = $request->email;
-        $newReservation->court = $request->court;
-        $newReservation->date = $request->date;
-        $newReservation->start_time = $request->start_time;
-        $newReservation->end_time = $request->end_time;
-        $newReservation->save();
+        $reservation = new Reservation();
+        $reservation->player_name = $request->player_name;
+        $reservation->player_surname = $request->player_surname;
+        $reservation->email = $request->email;
+        $reservation->court = $request->court;
+        $reservation->date = $request->date;
+        $reservation->start_time = $request->start_time;
+        $reservation->end_time = $request->end_time;
 
-        return redirect()->route('reservations.index');
+        $existing = DB::table('reservations')->where(
+            fn ($q) => $q->whereBetween('start_time', [$request->start_time, $request->end_time])
+            ->orWhereBetween('end_time', [$request->start_time, $request->end_time])
+            ->orWhere(
+                fn ($q) => $q->where('start_time', '<', $request->end_time)
+                ->where('end_time', '>', $request->end_time)
+            )
+        )
+        ->where('court', $request->court)
+        ->where('date', $request->date)
+        ->get();
+
+        if($existing->count() > 0) {
+            $reservation->delete();
+            return redirect()->back()->with('alert', 'Tento termín je na zvoleném kurtu už obsazen');
+        }
+        else {
+            $reservation->save();
+            return redirect()->route('reservations.index');
+        }
+
     }
 
     /**

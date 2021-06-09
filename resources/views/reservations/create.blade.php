@@ -11,6 +11,14 @@
             </div>
         @endif
 
+        <script>
+            var msg = '{{Session::get('alert')}}';
+            var exist = '{{Session::has('alert')}}';
+            if(exist) {
+                alert(msg);
+            }
+        </script>
+
         <form class="text-light" action="{{ route('reservations.store') }}" method="POST">
             @csrf
 

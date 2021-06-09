@@ -26,11 +26,11 @@ class StoreReservationRequest extends FormRequest
         return [
             'player_name' => 'required|max:255',
             'player_surname' => 'required|max:255',
-            //'email' => 'required|max:255',
+            'email' => 'required',
             'court' => 'required',
-            'date' => 'required',
-            'start_time' => 'required',
-            'end_time' => 'required',
+            'date' => 'required|date|after:today',
+            'start_time' => 'required|after:now',
+            'end_time' => 'required|after:start_time',
         ];
     }
 }
