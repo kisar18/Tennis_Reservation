@@ -39,15 +39,6 @@ class ReservationController extends Controller
      */
     public function store(StoreReservationRequest $request)
     {
-        $reservation = new Reservation();
-        $reservation->player_name = $request->player_name;
-        $reservation->player_surname = $request->player_surname;
-        $reservation->email = $request->email;
-        $reservation->court = $request->court;
-        $reservation->date = $request->date;
-        $reservation->start_time = $request->start_time;
-        $reservation->end_time = $request->end_time;
-
         $existing = DB::table('reservations')->where(
             fn ($q) => $q->whereBetween('start_time', [$request->start_time, $request->end_time])
             ->orWhereBetween('end_time', [$request->start_time, $request->end_time])
@@ -61,14 +52,20 @@ class ReservationController extends Controller
         ->get();
 
         if($existing->count() > 0) {
-            $reservation->delete();
             return redirect()->back()->with('alert', 'Tento termín je na zvoleném kurtu už obsazen');
         }
         else {
+            $reservation = new Reservation();
+            $reservation->player_name = $request->player_name;
+            $reservation->player_surname = $request->player_surname;
+            $reservation->email = $request->email;
+            $reservation->court = $request->court;
+            $reservation->date = $request->date;
+            $reservation->start_time = $request->start_time;
+            $reservation->end_time = $request->end_time;
             $reservation->save();
             return redirect()->route('reservations.index');
         }
-
     }
 
     /**
@@ -109,17 +106,33 @@ class ReservationController extends Controller
      */
     public function update(UpdateReservationRequest $request)
     {
-        $reservation = Reservation::find($request->id);
-        $reservation->player_name = $request->player_name;
-        $reservation->player_surname = $request->player_surname;
-        $reservation->email = $request->email;
-        $reservation->court = $request->court;
-        $reservation->date = $request->date;
-        $reservation->start_time = $request->start_time;
-        $reservation->end_time = $request->end_time;
-        $reservation->save();
+        $existing = DB::table('reservations')->where(
+            fn ($q) => $q->whereBetween('start_time', [$request->start_time, $request->end_time])
+            ->orWhereBetween('end_time', [$request->start_time, $request->end_time])
+            ->orWhere(
+                fn ($q) => $q->where('start_time', '<', $request->end_time)
+                ->where('end_time', '>', $request->end_time)
+            )
+        )
+        ->where('court', $request->court)
+        ->where('date', $request->date)
+        ->get();
 
-        return redirect()->route('reservations.index');
+        if($existing->count() > 0) {
+            return redirect()->back()->with('alert', 'Tento termín je na zvoleném kurtu už obsazen');
+        }
+        else {
+            $reservation = Reservation::find($request->id);
+            $reservation->player_name = $request->player_name;
+            $reservation->player_surname = $request->player_surname;
+            $reservation->email = $request->email;
+            $reservation->court = $request->court;
+            $reservation->date = $request->date;
+            $reservation->start_time = $request->start_time;
+            $reservation->end_time = $request->end_time;
+            $reservation->save();
+            return redirect()->route('reservations.index');
+        }
     }
 
     /**

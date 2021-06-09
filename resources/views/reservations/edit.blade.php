@@ -12,6 +12,14 @@
             </div>
         @endif
 
+        <script>
+            var msg = '{{Session::get('alert')}}';
+            var exist = '{{Session::has('alert')}}';
+            if(exist) {
+                alert(msg);
+            }
+        </script>
+
         <h1 class="text-light">Změna rezervace</h1>
 
         <form class="text-light" action="{{ route('reservations.update', $reservation) }}" method="POST">
