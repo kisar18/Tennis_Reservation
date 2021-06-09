@@ -3,7 +3,7 @@
 @section('content')
     <div class="d-flex justify-content-between">
         <h1 class="text-light my-4">Všechny rezervace</h1>
-        <form action="{{ url('/search') }}" class="inline-form my-4" method="GET">
+        <form class="inline-form my-4" method="GET" action="{{ url('/search') }}">
             @csrf
             <div class="input-group">
                 <input class="form-control" type="search" placeholder="Hledat" name="surname">

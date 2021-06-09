@@ -148,4 +148,12 @@ class ReservationController extends Controller
 
         return redirect()->route('reservations.index');
     }
+
+    public function search() 
+    {
+        $searched_surname = $_GET['surname'];
+        $reservations = Reservation::where('player_surname', 'LIKE', '%'. $searched_surname . '%')->get();
+
+        return view('reservations.search', compact('reservations'));
+    }
 }

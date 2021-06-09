@@ -18,6 +18,7 @@ use Illuminate\Support\Facades\Storage;
 
 Route::resource('reservations', ReservationController::class);
 Route::get('destroy/{id}', [ReservationController::class, 'destroy']);
+Route::get('search', [ReservationController::class, 'search']);
 
 Route::get('/', function() {
     return view('reservations.welcome');
