@@ -16,10 +16,18 @@ use Illuminate\Support\Facades\Storage;
 |
 */
 
-Route::resource('reservations', ReservationController::class);
-Route::get('destroy/{id}', [ReservationController::class, 'destroy']);
-Route::get('search', [ReservationController::class, 'search']);
-
-Route::get('/', function() {
+Route::get('/', function () {
     return view('reservations.welcome');
-});
+})->middleware(['auth'])->name('reservations.welcome');
+
+Route::resource('reservations', ReservationController::class)->middleware('auth');
+Route::get('destroy/{id}', [ReservationController::class, 'destroy'])->middleware('auth');
+Route::get('search', [ReservationController::class, 'search'])->middleware('auth');
+
+/*
+Route::get('/dashboard', function() {
+    return view('dashboard');
+})->middleware(['auth'])->name('dashboard');
+*/
+
+require __DIR__.'/auth.php';
