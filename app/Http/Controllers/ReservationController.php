@@ -156,4 +156,9 @@ class ReservationController extends Controller
 
         return view('reservations.search', compact('reservations'));
     }
+
+    public function contact()
+    {
+        return view('reservations.contact');
+    }
 }

@@ -17,6 +17,15 @@
         <script src="{{ asset('js/app.js') }}" defer></script>
     </head>
     <body>
+        <style type="text/css">
+            .min-h-screen {
+                background: rgb(108, 117, 125);
+                background: linear-gradient(0deg, rgba(108, 117, 125, 1) 0%, rgba(52, 58, 64, 1) 80%);
+                background-position: center;
+                background-repeat: no-repeat;
+                background-size: cover;
+            }
+        </style>
         <div class="font-sans text-gray-900 antialiased">
             {{ $slot }}
         </div>

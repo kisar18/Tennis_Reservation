@@ -24,7 +24,7 @@
                 <a class="nav-link" href="{{ route('reservations.index') }}">Seznam rezervací</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" href="#">Kontakt</a>
+                <a class="nav-link" href="{{ url('/contact') }}">Kontakt</a>
             </li>
             </ul>
 

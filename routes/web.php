@@ -24,10 +24,6 @@ Route::resource('reservations', ReservationController::class)->middleware('auth'
 Route::get('destroy/{id}', [ReservationController::class, 'destroy'])->middleware('auth');
 Route::get('search', [ReservationController::class, 'search'])->middleware('auth');
 
-/*
-Route::get('/dashboard', function() {
-    return view('dashboard');
-})->middleware(['auth'])->name('dashboard');
-*/
+Route::get('contact', [ReservationController::class, 'contact'])->middleware('auth');
 
 require __DIR__.'/auth.php';
